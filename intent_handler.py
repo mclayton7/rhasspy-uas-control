@@ -23,7 +23,8 @@ class IntentHandler:
             'GetAircraftLocation': self._handle_get_aircraft_location,
             'GetStarepointLocation': self._handle_get_aircraft_location,
             'ReturnHome': self._handle_return_home,
-            'StareAtwaypoint': self._handle_stare_at_waypoint,
+            'StareAtWaypoint': self._handle_stare_at_waypoint,
+            'StareAtMe': self._handle_stare_at_me,
             'SwitchToBlackHot': self._switch_to_black_hot,
             'SwitchToEo': self._switch_to_eo,
             'SwitchToIr': self._switch_to_ir,
@@ -37,10 +38,11 @@ class IntentHandler:
 
     def _handle_fly_mission(self, entities):
         try:
-            mission_name = entities['value']
+            mission_name = entities[0]['value']
             mission = MISSIONS[mission_name]
-        except expression as identifier:
-            pass
+        except Exception as e:
+            print("Exception {}".format(e))
+            raise e
         self.aircraft_api.fly_mission(mission)
         self.send_text_to_speech('Executing mission {}.'.format(mission_name))
 
@@ -50,10 +52,11 @@ class IntentHandler:
 
     def _handle_fly_to_waypoint(self, entities):
         try:
-            waypoint_name = entities['value']
+            waypoint_name = entities[0]['value']
             point = WAYPOINTS[waypoint_name]
-        except expression as identifier:
-            pass
+        except Exception as e:
+            print("Exception {}".format(e))
+            raise e
         self.aircraft_api.fly_to_point(point)
         self.send_text_to_speech(
             'Flying to waypoint {}.'.format(waypoint_name))
@@ -72,13 +75,19 @@ class IntentHandler:
 
     def _handle_stare_at_waypoint(self, entities):
         try:
-            waypoint_name = entities['value']
+            waypoint_name = entities[0]['value']
             point = WAYPOINTS[waypoint_name]
-        except expression as identifier:
-            pass
+        except Exception as e:
+            print("Exception {}".format(e))
+            raise e
         self.aircraft_api.stare_at_point(point)
         self.send_text_to_speech(
             'Staring at waypoint {}.'.format(waypoint_name))
+
+    def _handle_stare_at_me(self, entities):
+        self.aircraft_api.stare_at_point(ME)
+        self.send_text_to_speech(
+            'Staring at Me {}.'.format(ME))        
 
     def _switch_to_black_hot(self, entities):
         self.aircraft_api.switch_to_black_hot()
@@ -89,7 +98,7 @@ class IntentHandler:
         self.send_text_to_speech('Switching to EO.')
 
     def _switch_to_ir(self, entities):
-        self.aircraft_api.fly_to_point()
+        self.aircraft_api.switch_to_ir()
         self.send_text_to_speech('Switching to IR.')
 
     def _switch_to_white_hot(self, entities):

@@ -2,15 +2,14 @@
     "intent": {
         "fsticuffs": {
             "fuzzy": false
-        },
-        "system": "adapt"
+        }
     },
     "microphone": {
         "arecord": {
             "device": "default:CARD=CameraB409241"
         },
         "pyaudio": {
-            "device": "2"
+            "device": "1"
         },
         "system": "arecord"
     },
