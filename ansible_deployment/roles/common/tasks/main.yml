@@ -1,0 +1,43 @@
+- name: Upgrade all packages
+  package:
+    name: '*'
+    state: latest
+
+- name: Install packages
+  package:
+    name:
+      - wget
+      - git
+      - ntp
+      - tcpdump
+      - htop
+      - python3
+      - python3-pip
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg2
+    state: present
+
+- name: Docker Installation for Raspberry Pi
+  shell: curl -sLS https://get.docker.com | sudo sh
+  args:
+    warn: no
+
+- name: Start and enable docker-ce
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Install docker Python module
+  pip:
+    name: docker
+
+- name: Create a directory for volumes
+  file:
+    path: "{{ path }}"
+    state: directory
+    owner: "{{ user }}"
+    group: '0'
+    mode: 'g+rwx'

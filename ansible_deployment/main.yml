@@ -1,0 +1,15 @@
+- name: Deploy Rhasspy for UAS control
+  hosts: all
+  remote_user: pi
+  become: yes
+
+  vars:
+    path: /rhasspy
+    user: root
+    rhasspy_version: latest
+    ansible_python_interpreter: /usr/bin/python3
+
+  roles:
+    - ansible_verification
+    - common
+    - rhasspy-server

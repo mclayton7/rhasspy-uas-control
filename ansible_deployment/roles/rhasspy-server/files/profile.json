@@ -1,0 +1,24 @@
+{
+    "intent": {
+        "fsticuffs": {
+            "fuzzy": false
+        },
+        "system": "adapt"
+    },
+    "microphone": {
+        "arecord": {
+            "device": "default:CARD=CameraB409241"
+        },
+        "pyaudio": {
+            "device": "2"
+        },
+        "system": "arecord"
+    },
+    "wake": {
+        "pocketsphinx": {
+            "keyphrase": "arbitrator",
+            "threshold": 3.162277660168379e-19
+        },
+        "system": "pocketsphinx"
+    }
+}

@@ -1,0 +1,49 @@
+- name: Create a directory for settings
+  file:
+    path: "{{ path }}/profiles/en"
+    state: directory
+    owner: "{{ user }}"
+    mode: '0777'
+
+- name: Copy rhasspy sentences
+  copy:
+    src: sentences.ini
+    dest: "{{ path }}/profiles/en/sentences.ini"
+    owner: "{{ user }}"
+    mode: '0777'
+  
+- name: Copy rhasspy profile
+  copy:
+    src: profile.json
+    dest: "{{ path }}/profiles/en/profile.json"
+    owner: "{{ user }}"
+    mode: '0777'
+
+- name: Copy slots
+  copy:
+    src: slots
+    dest: "{{ path }}/profiles/en/"
+    owner: "{{ user }}"
+    mode: '0777'
+
+- name: Remove existing rhasspy container
+  docker_container:
+    name: rhasspy
+    state: absent
+
+- name: Setup rhasspy container
+  docker_container:
+    name: rhasspy
+    user: root
+    image: synesthesiam/rhasspy-server:{{ rhasspy_version }}
+    restart_policy: always
+    networks_cli_compatible: yes
+    published_ports:
+      - 12101:12101/tcp
+    devices:
+      - "/dev/snd:/dev/snd"
+    volumes:
+      - "{{path}}/profiles:/profiles"
+    command: "--profile en --user-profiles /profiles"
+
+

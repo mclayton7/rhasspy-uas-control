@@ -32,7 +32,7 @@ class IntentHandler:
             'ZoomOut': self._zoom_out,
         }
         func = handlers.get(
-            intent_name, lambda x: print('cannot handle function'))
+            intent_name, lambda x: print('cannot handle function: {}'.format(intent)))
         func(entities)
 
     def _handle_fly_mission(self, entities):
@@ -59,11 +59,11 @@ class IntentHandler:
             'Flying to waypoint {}.'.format(waypoint_name))
 
     def _handle_get_aircraft_location(self, entities):
-        (lat_rad, lon_rad, alt_msl) = self.aircraft_api.get_aircraft_location()
+        location = self.aircraft_api.get_aircraft_location()
         self.send_text_to_speech('The location of the aircraft is unknown.')
 
     def _handle_get_starepoint_location(self, entities):
-        (lat_rad, lon_rad, alt_msl) = self.aircraft_api.get_starepoint_location()
+        location = self.aircraft_api.get_starepoint_location()
         self.send_text_to_speech('The location of the starepoint is unknown.')
 
     def _handle_return_home(self, entities):
